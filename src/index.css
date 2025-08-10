@@ -137,3 +137,18 @@ All colors MUST be HSL.
   .code-clickable { @apply cursor-pointer font-semibold text-[hsl(var(--text-primary))]; }
   .tooltip-bubble { @apply bg-tooltip text-tooltip-foreground text-sm px-3 py-1 rounded-md shadow; }
 }
+
+/* Micro-interactions */
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 0.4; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes lock-toggle {
+  0% { transform: rotate(0deg) scale(1); }
+  60% { transform: rotate(180deg) scale(1.08); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.ripple-anim { animation: ripple 600ms ease-out forwards; }
+.lock-anim { animation: lock-toggle 0.3s ease-out; }
