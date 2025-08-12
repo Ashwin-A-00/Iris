@@ -84,7 +84,8 @@ export default {
 			},
 			fontFamily: {
 				sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-				heading: ['Poppins', 'Inter', 'ui-sans-serif', 'system-ui']
+				heading: ['Poppins', 'Inter', 'ui-sans-serif', 'system-ui'],
+				mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
 			},
 			keyframes: {
 				'accordion-down': {

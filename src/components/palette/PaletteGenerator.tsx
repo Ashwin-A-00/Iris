@@ -3,8 +3,9 @@ import SwatchCard from "./SwatchCard";
 import { Button } from "@/components/ui/button";
 import PreviewPane from "./PreviewPane";
 import { toPng } from "html-to-image";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { Sun, Moon } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const hslToHex = (h: number, s: number, l: number) => {
   s /= 100; l /= 100;
@@ -183,19 +184,35 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
         <div>
           <div className="mx-auto max-w-6xl">
             {/* Harmony selector */}
-            <div className="mb-4 flex flex-wrap items-center gap-2">
-              {harmonyOptions.map((opt) => (
-                <Button
-                  key={opt.key}
-                  variant={harmony === opt.key ? 'secondary' : 'outline'}
-                  size="sm"
-                  className={harmony === opt.key ? 'rounded-full bg-secondary/70' : 'rounded-full'}
-                  onClick={() => { setHarmony(opt.key); generate(opt.key); }}
-                  aria-label={`${opt.label} harmony`}
-                >
-                  {opt.label}
-                </Button>
-              ))}
+            <div className="mb-4">
+              {/* Mobile dropdown */}
+              <div className="md:hidden mb-2">
+                <Select value={harmony} onValueChange={(v: any) => { setHarmony(v); generate(v); }}>
+                  <SelectTrigger aria-label="Select harmony" className="w-full">
+                    <SelectValue placeholder="Harmony" />
+                  </SelectTrigger>
+                  <SelectContent align="start" className="backdrop-blur supports-[backdrop-filter]:bg-popover/70">
+                    {harmonyOptions.map(opt => (
+                      <SelectItem key={opt.key} value={opt.key}>{opt.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {/* Desktop pills */}
+              <div className="hidden md:flex flex-wrap items-center gap-2">
+                {harmonyOptions.map((opt) => (
+                  <Button
+                    key={opt.key}
+                    variant={harmony === opt.key ? 'secondary' : 'outline'}
+                    size="sm"
+                    className={`rounded-full transition-all duration-200 hover:-translate-y-0.5 ${harmony === opt.key ? 'bg-secondary/70' : ''}`}
+                    onClick={() => { setHarmony(opt.key); generate(opt.key); }}
+                    aria-label={`${opt.label} harmony`}
+                  >
+                    {opt.label}
+                  </Button>
+                ))}
+              </div>
             </div>
 
             <div ref={paletteRef} className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6" role="list" aria-label="Color palette">
@@ -217,46 +234,46 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
           </div>
 
           <div className="mt-8 hidden md:flex items-center justify-center gap-3">
-            <Button variant="cta" size="xl" onClick={() => generate()} aria-label="Generate Palette">
-              Generate Palette
+            <Button variant="outline" size="lg" onClick={() => generate()} aria-label="Generate Palette" className="rounded-md">
+              Generate
             </Button>
-            <Button variant="secondary" size="lg" className="rounded-full" onClick={() => setPreview(p => !p)} aria-label="Toggle Preview">
+            <Button variant="outline" size="lg" className="rounded-md" onClick={() => setPreview(p => !p)} aria-label="Toggle Preview">
               {preview ? 'Hide Preview' : 'Preview'}
             </Button>
-            {preview && (
-              <Button variant="outline" size="lg" className="rounded-full" onClick={() => setPreviewDark(d => !d)} aria-label="Toggle preview mode">
-                {previewDark ? <Sun size={18} /> : <Moon size={18} />} {previewDark ? 'Light' : 'Dark'}
-              </Button>
-            )}
-            <Button variant="outline" size="lg" className="rounded-full" onClick={exportPng} aria-label="Export as PNG">
+            <Button variant="outline" size="lg" className="rounded-md" onClick={exportPng} aria-label="Export as PNG">
               Export PNG
             </Button>
-            <Button variant="secondary" size="lg" className="rounded-full" onClick={savePalette} aria-label="Save palette">
+            <Button variant="secondary" size="lg" className="rounded-md" onClick={savePalette} aria-label="Save palette">
               Save
             </Button>
           </div>
         </div>
 
         {preview && (
-          <div className="hidden lg:block h-full">
+          <div className="hidden lg:block h-full relative">
             <PreviewPane colors={colors} mode={previewDark ? 'dark' : 'light'} />
+            <div className="absolute top-3 right-3">
+              <Button variant="ghost" size="icon" aria-label="Toggle preview mode" onClick={() => setPreviewDark(d => !d)} className="rounded-md">
+                {previewDark ? <Sun size={16} /> : <Moon size={16} />}
+              </Button>
+            </div>
           </div>
         )}
       </div>
 
       {/* Mobile sticky bar */}
       <div className="md:hidden fixed inset-x-0 bottom-0 p-4">
-        <div className="mx-auto max-w-3xl rounded-full backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-background/80 border shadow-card flex items-center gap-2 p-2">
-          <Button variant="cta" size="xl" onClick={() => generate()} className="flex-1" aria-label="Generate Palette">
+        <div className="mx-auto max-w-3xl rounded-md backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-background/80 border shadow-card flex items-center gap-2 p-2">
+          <Button variant="outline" size="lg" onClick={() => generate()} className="flex-1 rounded-md" aria-label="Generate Palette">
             Generate
           </Button>
-          <Button variant="secondary" size="lg" className="rounded-full flex-1" onClick={() => setPreview(p => !p)} aria-label="Toggle Preview">
+          <Button variant="outline" size="lg" className="rounded-md flex-1" onClick={() => setPreview(p => !p)} aria-label="Toggle Preview">
             {preview ? 'Hide' : 'Preview'}
           </Button>
-          <Button variant="outline" size="lg" className="rounded-full" onClick={exportPng} aria-label="Export as PNG">
+          <Button variant="outline" size="icon" className="rounded-md" onClick={exportPng} aria-label="Export as PNG">
             PNG
           </Button>
-          <Button variant="outline" size="lg" className="rounded-full" onClick={savePalette} aria-label="Save palette">
+          <Button variant="secondary" size="icon" className="rounded-md" onClick={savePalette} aria-label="Save palette">
             Save
           </Button>
         </div>

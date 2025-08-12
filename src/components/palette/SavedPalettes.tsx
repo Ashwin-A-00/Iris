@@ -41,11 +41,11 @@ const SavedPalettes: React.FC<SavedPalettesProps> = ({ onApply }) => {
         <button
           key={p.id}
           onClick={() => onApply(p.colors)}
-          className="swatch-card p-3 rounded-xl text-left transition-transform duration-150 active:scale-95"
+          className="p-3 rounded-md text-left transition-transform duration-150 active:scale-95 border bg-card/40 supports-[backdrop-filter]:bg-card/30 backdrop-blur hover:outline outline-1 outline-ring/30"
         >
           <div className="grid grid-cols-5 gap-1 mb-2">
             {p.colors.map((c, i) => (
-              <div key={i} className="h-8 rounded" style={{ backgroundColor: c }} />
+              <div key={i} className="h-8 rounded-sm" style={{ backgroundColor: c }} />
             ))}
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">

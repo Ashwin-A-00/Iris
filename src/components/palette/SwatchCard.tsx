@@ -82,7 +82,7 @@ const SwatchCard: React.FC<SwatchCardProps> = ({
 
   return (
     <div
-      className={`swatch-card flex flex-col items-center p-4 select-none ${dragging ? 'scale-105 shadow-card-hover' : ''} ${animClass}`}
+      className={`swatch-card flex flex-col items-center p-4 select-none ${dragging ? 'scale-[1.02] shadow-card-hover' : ''} ${animClass}`}
       style={animState === 'in' && animationDelay ? { animationDelay: `${animationDelay}ms` } : undefined}
       draggable
       onDragStart={() => { setDragging(true); onDragStart(index); }}
@@ -93,7 +93,7 @@ const SwatchCard: React.FC<SwatchCardProps> = ({
       role="listitem"
       aria-label={`Color swatch ${color}`}
     >
-      <div className="w-full rounded-xl h-[220px] md:h-[380px] relative overflow-hidden" style={{ backgroundColor: color }}>
+      <div className="w-full rounded-md h-[220px] md:h-[380px] relative overflow-hidden" style={{ backgroundColor: color }}>
         {/* Lock toggle */}
         <div className="absolute top-2 right-2">
           <Tooltip>
@@ -101,7 +101,7 @@ const SwatchCard: React.FC<SwatchCardProps> = ({
               <button
                 aria-label={locked ? 'Unlock this color' : 'Lock this color'}
                 onClick={handleToggleLock}
-                className="rounded-full p-2 bg-white/70 backdrop-blur border hover:shadow-md transition-all duration-200 active:scale-95"
+                className="rounded-full p-2 bg-popover/60 supports-[backdrop-filter]:bg-popover/40 backdrop-blur border border-border/60 hover:shadow-md transition-all duration-200 active:scale-95"
               >
                 {locked ? (
                   <Lock className={`text-[hsl(var(--text-primary))] ${lockAnimKey ? 'lock-anim' : ''}`} size={16} />
@@ -119,17 +119,17 @@ const SwatchCard: React.FC<SwatchCardProps> = ({
         {/* Ripple on copy */}
         {rippleKey !== 0 && (
           <span key={rippleKey} className="pointer-events-none absolute inset-0">
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[160%] rounded-full bg-white/30 ripple-anim" />
+          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[160%] rounded-full bg-foreground/20 ripple-anim" />
           </span>
         )}
       </div>
 
       <div className="mt-4 w-full text-center relative">
         <div className="flex flex-col items-center gap-2">
-          <span className="code-clickable" onClick={() => handleCopy(color.toUpperCase(), 'hex')}>
+          <span className="code-clickable font-mono" onClick={() => handleCopy(color.toUpperCase(), 'hex')}>
             {color.toUpperCase()}
           </span>
-          <span className="code-clickable" onClick={() => handleCopy(rgbString, 'rgb')}>
+          <span className="code-clickable font-mono" onClick={() => handleCopy(rgbString, 'rgb')}>
             {rgbString}
           </span>
         </div>

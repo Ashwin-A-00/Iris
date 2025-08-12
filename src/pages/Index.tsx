@@ -13,16 +13,16 @@ const Index = () => {
     <div className="min-h-screen flex flex-col items-center">
       <header className="w-full pt-16 pb-10">
         <div className="container mx-auto relative">
-          <h1 className="text-4xl md:text-5xl text-center font-heading font-bold text-[hsl(var(--text-primary))] animate-fade-in">
+          <h1 className="text-4xl md:text-5xl text-center font-heading font-semibold text-[hsl(var(--text-primary))] animate-fade-in">
             Color Palette Generator
           </h1>
           <Dialog open={savedOpen} onOpenChange={setSavedOpen}>
             <DialogTrigger asChild>
-              <Button aria-label="Open saved palettes" variant="outline" size="icon" className="rounded-full absolute right-4 top-1/2 -translate-y-1/2">
+              <Button aria-label="Open saved palettes" variant="ghost" size="icon" className="rounded-md absolute right-4 top-1/2 -translate-y-1/2">
                 <Bookmark />
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="rounded-md border bg-popover/30 supports-[backdrop-filter]:bg-popover/20 backdrop-blur-xl">
               <DialogHeader>
                 <DialogTitle>Saved Palettes</DialogTitle>
               </DialogHeader>

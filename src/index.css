@@ -61,6 +61,13 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Reactive background controls */
+    --bg-x: 50%;
+    --bg-y: 50%;
+    --bg1: 228 52% 12%;  /* deep blue */
+    --bg2: 268 32% 18%;  /* subtle purple */
+    --bg-base: 220 20% 8%; /* charcoal */
   }
 
   .dark {
@@ -92,12 +99,12 @@ All colors MUST be HSL.
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
 
-    /* Keep brand vibrant in dark too */
-    --brand: 5 100% 69%;
-    --brand-hover: 10 100% 74%;
+    /* Keep brand toned-down for dark */
+    --brand: 230 90% 60%;
+    --brand-hover: 230 90% 66%;
     --brand-foreground: 0 0% 100%;
 
-    --text-primary: 0 0% 98%;
+    --text-primary: 0 0% 96%;
 
     --tooltip-bg: 0 0% 15%;
     --tooltip-text: 0 0% 100%;
@@ -112,6 +119,13 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Reactive background controls */
+    --bg-x: 50%;
+    --bg-y: 50%;
+    --bg1: 228 52% 12%;
+    --bg2: 268 32% 18%;
+    --bg-base: 220 20% 8%;
   }
 }
 
@@ -123,18 +137,21 @@ All colors MUST be HSL.
 
   body {
     @apply text-foreground font-sans;
-    background-image: linear-gradient(180deg, hsl(var(--gradient-start)) 0%, hsl(var(--gradient-end)) 100%);
-    background-size: 150% 150%;
-    animation: bg-move 20s ease-in-out infinite;
+    background:
+      radial-gradient(900px at var(--bg-x,50%) var(--bg-y,50%), hsl(var(--bg1)) 0%, transparent 70%),
+      radial-gradient(1400px at 50% 60%, hsl(var(--bg2)) 0%, hsl(var(--bg-base)) 80%);
+    background-color: hsl(var(--bg-base));
+    background-attachment: fixed;
+    transition: background 300ms ease-in-out, background-position 300ms ease-in-out;
   }
 
   h1, h2, h3, h4, h5, h6 { @apply font-heading text-[hsl(var(--text-primary))]; }
 }
 
 @layer utilities {
-  .hover-scale { @apply transition-transform duration-200 hover:-translate-y-1.5; }
-  .swatch-card { @apply rounded-2xl border bg-card shadow-card hover:shadow-card-hover hover-scale transition-all duration-300; }
-  .code-clickable { @apply cursor-pointer font-semibold text-[hsl(var(--text-primary))]; }
+  .hover-scale { @apply transition-transform duration-200 hover:-translate-y-1; }
+  .swatch-card { @apply rounded-md border bg-card/40 supports-[backdrop-filter]:bg-card/30 backdrop-blur-md shadow-card hover:shadow-card-hover transition-all duration-200; }
+  .code-clickable { @apply cursor-pointer font-mono font-medium text-[hsl(var(--text-primary))]; }
   .tooltip-bubble { @apply bg-tooltip text-tooltip-foreground text-sm px-3 py-1 rounded-md shadow; }
 }
 
