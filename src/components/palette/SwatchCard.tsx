@@ -94,28 +94,6 @@ const SwatchCard: React.FC<SwatchCardProps> = ({
       aria-label={`Color swatch ${color}`}
     >
       <div className="w-full rounded-md h-[220px] md:h-[380px] relative overflow-hidden" style={{ backgroundColor: color }}>
-        {/* Lock toggle */}
-        <div className="absolute top-2 right-2">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                aria-label={locked ? 'Unlock this color' : 'Lock this color'}
-                onClick={handleToggleLock}
-                className="rounded-full p-2 bg-popover/60 supports-[backdrop-filter]:bg-popover/40 backdrop-blur border border-border/60 hover:shadow-md transition-all duration-200 active:scale-95"
-              >
-                {locked ? (
-                  <Lock className={`text-[hsl(var(--text-primary))] ${lockAnimKey ? 'lock-anim' : ''}`} size={16} />
-                ) : (
-                  <Unlock className={`text-[hsl(var(--text-primary))] ${lockAnimKey ? 'lock-anim' : ''}`} size={16} />
-                )}
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              {locked ? 'Unlock this color' : 'Lock this color'}
-            </TooltipContent>
-          </Tooltip>
-        </div>
-
         {/* Ripple on copy */}
         {rippleKey !== 0 && (
           <span key={rippleKey} className="pointer-events-none absolute inset-0">
