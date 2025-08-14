@@ -13,8 +13,8 @@ const Index = () => {
     <div className="min-h-screen flex flex-col items-center">
       <header className="w-full pt-16 pb-10">
         <div className="container mx-auto relative">
-          <h1 className="text-4xl md:text-5xl text-center font-heading font-semibold text-[hsl(var(--text-primary))] animate-fade-in">
-            Color Palette Generator
+          <h1 className="text-2xl md:text-3xl text-center font-mono font-medium text-[hsl(var(--text-primary))] animate-fade-in">
+            palette.generator
           </h1>
           <Dialog open={savedOpen} onOpenChange={setSavedOpen}>
             <DialogTrigger asChild>

@@ -136,23 +136,40 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply text-foreground font-sans;
+    @apply text-foreground font-mono;
     background:
-      radial-gradient(900px at var(--bg-x,50%) var(--bg-y,50%), hsl(var(--bg1)) 0%, transparent 70%),
-      radial-gradient(1400px at 50% 60%, hsl(var(--bg2)) 0%, hsl(var(--bg-base)) 80%);
-    background-color: hsl(var(--bg-base));
+      radial-gradient(1200px at var(--bg-x,50%) var(--bg-y,50%), 
+        hsl(228 52% 12% / 0.4) 0%, transparent 50%),
+      radial-gradient(800px at calc(var(--bg-x) + 20%) calc(var(--bg-y) - 10%), 
+        hsl(268 32% 18% / 0.3) 0%, transparent 60%),
+      radial-gradient(600px at calc(var(--bg-x) - 15%) calc(var(--bg-y) + 15%), 
+        hsl(248 38% 15% / 0.2) 0%, transparent 40%),
+      linear-gradient(135deg, 
+        hsl(220 20% 8%) 0%, 
+        hsl(225 25% 10%) 50%, 
+        hsl(230 30% 12%) 100%);
     background-attachment: fixed;
-    transition: background 300ms ease-in-out, background-position 300ms ease-in-out;
+    transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-x: hidden;
   }
 
-  h1, h2, h3, h4, h5, h6 { @apply font-heading text-[hsl(var(--text-primary))]; }
+  h1, h2, h3, h4, h5, h6 { @apply font-mono font-medium text-[hsl(var(--text-primary))]; }
 }
 
 @layer utilities {
-  .hover-scale { @apply transition-transform duration-200 hover:-translate-y-1; }
-  .swatch-card { @apply rounded-md border bg-card/40 supports-[backdrop-filter]:bg-card/30 backdrop-blur-md shadow-card hover:shadow-card-hover transition-all duration-200; }
+  .hover-scale { @apply transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02]; }
+  .swatch-card { @apply rounded border bg-card/40 supports-[backdrop-filter]:bg-card/30 backdrop-blur-md shadow-card hover:shadow-card-hover transition-all duration-300; }
   .code-clickable { @apply cursor-pointer font-mono font-medium text-[hsl(var(--text-primary))]; }
-  .tooltip-bubble { @apply bg-tooltip text-tooltip-foreground text-sm px-3 py-1 rounded-md shadow; }
+  .tooltip-bubble { @apply bg-tooltip text-tooltip-foreground text-xs px-2 py-1 rounded shadow font-mono; }
+  .smooth-transition { @apply transition-all duration-300 ease-out; }
+  .palette-fade-in { 
+    @apply opacity-0 translate-y-2 transition-all duration-300 ease-out;
+    animation: paletteSlideIn 0.3s ease-out forwards;
+  }
+  .palette-fade-out { 
+    @apply transition-all duration-200 ease-in;
+    animation: paletteSlideOut 0.2s ease-in forwards;
+  }
 }
 
 /* Micro-interactions */
@@ -167,5 +184,25 @@ All colors MUST be HSL.
   100% { transform: rotate(360deg) scale(1); }
 }
 
+@keyframes paletteSlideIn {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes paletteSlideOut {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-4px); }
+}
+
+@keyframes backgroundShift {
+  0%, 100% { 
+    background-position: 0% 50%;
+  }
+  50% { 
+    background-position: 100% 50%;
+  }
+}
+
 .ripple-anim { animation: ripple 600ms ease-out forwards; }
 .lock-anim { animation: lock-toggle 0.3s ease-out; }
+.bg-animate { animation: backgroundShift 20s ease-in-out infinite; }

@@ -85,7 +85,7 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
         setColors(appliedPalette);
         setLocked([false, false, false, false, false]);
         setAnimState('in');
-        window.setTimeout(() => setAnimState('idle'), 200);
+        window.setTimeout(() => setAnimState('idle'), 300);
       }, 200);
     }
   }, [appliedPalette]);
@@ -122,8 +122,8 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
       const fresh = rule === 'random' ? randomPastelPalette() : generateByHarmony(rule);
       setColors(prev => prev.map((c, i) => (locked[i] ? c : fresh[i])));
       setAnimState('in');
-      window.setTimeout(() => setAnimState('idle'), 500);
-    }, 250);
+      window.setTimeout(() => setAnimState('idle'), 300);
+    }, 150);
   }, [harmony, locked, generateByHarmony]);
 
   const onDragStart = (index: number) => setDragFrom(index);
@@ -205,7 +205,7 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
                     key={opt.key}
                     variant={harmony === opt.key ? 'secondary' : 'outline'}
                     size="sm"
-                    className={`rounded-full transition-all duration-200 hover:-translate-y-0.5 ${harmony === opt.key ? 'bg-secondary/70' : ''}`}
+                    className={`rounded transition-all duration-200 hover:-translate-y-0.5 font-mono text-xs ${harmony === opt.key ? 'bg-secondary/70' : ''}`}
                     onClick={() => { setHarmony(opt.key); generate(opt.key); }}
                     aria-label={`${opt.label} harmony`}
                   >
@@ -233,18 +233,18 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
             </div>
           </div>
 
-          <div className="mt-8 hidden md:flex items-center justify-center gap-3">
-            <Button variant="outline" size="lg" onClick={() => generate()} aria-label="Generate Palette" className="rounded-md">
-              Generate
+          <div className="mt-8 hidden md:flex items-center justify-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => generate()} aria-label="Generate Palette" className="rounded font-mono text-xs">
+              generate
             </Button>
-            <Button variant="outline" size="lg" className="rounded-md" onClick={() => setPreview(p => !p)} aria-label="Toggle Preview">
-              {preview ? 'Hide Preview' : 'Preview'}
+            <Button variant="outline" size="sm" className="rounded font-mono text-xs" onClick={() => setPreview(p => !p)} aria-label="Toggle Preview">
+              {preview ? 'hide' : 'preview'}
             </Button>
-            <Button variant="outline" size="lg" className="rounded-md" onClick={exportPng} aria-label="Export as PNG">
-              Export PNG
+            <Button variant="outline" size="sm" className="rounded font-mono text-xs" onClick={exportPng} aria-label="Export as PNG">
+              export
             </Button>
-            <Button variant="secondary" size="lg" className="rounded-md" onClick={savePalette} aria-label="Save palette">
-              Save
+            <Button variant="secondary" size="sm" className="rounded font-mono text-xs" onClick={savePalette} aria-label="Save palette">
+              save
             </Button>
           </div>
         </div>
@@ -262,19 +262,19 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
       </div>
 
       {/* Mobile sticky bar */}
-      <div className="md:hidden fixed inset-x-0 bottom-0 p-4">
-        <div className="mx-auto max-w-3xl rounded-md backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-background/80 border shadow-card flex items-center gap-2 p-2">
-          <Button variant="outline" size="lg" onClick={() => generate()} className="flex-1 rounded-md" aria-label="Generate Palette">
-            Generate
+      <div className="md:hidden fixed inset-x-0 bottom-0 p-3">
+        <div className="mx-auto max-w-3xl rounded backdrop-blur supports-[backdrop-filter]:bg-background/70 bg-background/80 border shadow-card flex items-center gap-1 p-2">
+          <Button variant="outline" size="sm" onClick={() => generate()} className="flex-1 rounded font-mono text-xs" aria-label="Generate Palette">
+            gen
           </Button>
-          <Button variant="outline" size="lg" className="rounded-md flex-1" onClick={() => setPreview(p => !p)} aria-label="Toggle Preview">
-            {preview ? 'Hide' : 'Preview'}
+          <Button variant="outline" size="sm" className="rounded flex-1 font-mono text-xs" onClick={() => setPreview(p => !p)} aria-label="Toggle Preview">
+            {preview ? 'hide' : 'view'}
           </Button>
-          <Button variant="outline" size="icon" className="rounded-md" onClick={exportPng} aria-label="Export as PNG">
-            PNG
+          <Button variant="outline" size="sm" className="rounded font-mono text-xs" onClick={exportPng} aria-label="Export as PNG">
+            png
           </Button>
-          <Button variant="secondary" size="icon" className="rounded-md" onClick={savePalette} aria-label="Save palette">
-            Save
+          <Button variant="secondary" size="sm" className="rounded font-mono text-xs" onClick={savePalette} aria-label="Save palette">
+            save
           </Button>
         </div>
       </div>

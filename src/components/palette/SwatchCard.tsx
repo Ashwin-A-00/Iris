@@ -125,11 +125,11 @@ const SwatchCard: React.FC<SwatchCardProps> = ({
       </div>
 
       <div className="mt-4 w-full text-center relative">
-        <div className="flex flex-col items-center gap-2">
-          <span className="code-clickable font-mono" onClick={() => handleCopy(color.toUpperCase(), 'hex')}>
+        <div className="flex flex-col items-center gap-0.5">
+          <span className="code-clickable font-mono text-sm" onClick={() => handleCopy(color.toUpperCase(), 'hex')}>
             {color.toUpperCase()}
           </span>
-          <span className="code-clickable font-mono" onClick={() => handleCopy(rgbString, 'rgb')}>
+          <span className="code-clickable font-mono text-xs opacity-60" onClick={() => handleCopy(rgbString, 'rgb')}>
             {rgbString}
           </span>
         </div>
