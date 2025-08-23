@@ -6,97 +6,130 @@ interface PreviewPaneProps {
 }
 
 const PreviewPane: React.FC<PreviewPaneProps> = ({ colors, mode = 'light' }) => {
-  const primary = colors[1] || "#FF6F61";
-  const secondary = colors[2] || "#A0AEC0";
-  const accent = colors[3] || "#E2F0FB";
-  const background = colors[0] || "#FDE2E4";
-  
   const isDark = mode === 'dark';
 
   return (
-    <aside className="w-full h-full animate-slide-in-right">
-      <div className="rounded border bg-card/20 supports-[backdrop-filter]:bg-card/10 backdrop-blur-xl p-8 h-full transition-all duration-300 space-y-6">
+    <aside className="w-full h-full animate-fade-in">
+      <div className="rounded-lg border bg-card/5 supports-[backdrop-filter]:bg-card/3 backdrop-blur-xl p-6 h-full transition-all duration-500 space-y-5">
         
-        {/* Header Section */}
-        <div 
-          className="rounded border p-6 transition-all duration-300 relative overflow-hidden"
-          style={{ 
-            background: isDark 
-              ? `linear-gradient(135deg, #111 0%, #1f1f1f 50%, #2a2a2a 100%)`
-              : `linear-gradient(135deg, ${background} 0%, ${colors[4] || '#E2F0FB'} 100%)`,
-            borderColor: primary + '20'
-          }}
-        >
-          <div className="relative z-10">
-            <h2 className="text-lg font-mono font-medium mb-1" style={{ color: isDark ? '#f5f5f5' : '#1a1a1a' }}>
-              interface preview
-            </h2>
-            <p className="text-sm font-mono opacity-70" style={{ color: isDark ? '#e5e5e5' : '#4a4a4a' }}>
-              your palette in action
-            </p>
-          </div>
-        </div>
-
-        {/* Interactive Elements */}
-        <div className="space-y-4">
-          <button
-            className="w-full h-12 rounded border font-mono text-sm font-medium transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
-            style={{ 
-              backgroundColor: primary,
-              color: isDark ? '#ffffff' : '#000000',
-              borderColor: primary
-            }}
-          >
-            primary.action()
-          </button>
-
-          <button
-            className="w-full h-10 rounded border font-mono text-sm transition-all duration-300 hover:scale-[1.01]"
-            style={{ 
-              backgroundColor: 'transparent',
-              color: isDark ? '#f5f5f5' : '#1a1a1a',
-              borderColor: secondary
-            }}
-          >
-            secondary.btn
-          </button>
-        </div>
-
-        {/* Card Component */}
-        <div 
-          className="rounded border p-6 transition-all duration-300"
-          style={{ 
-            backgroundColor: isDark ? '#ffffff08' : '#ffffff60',
-            borderColor: accent + '40'
-          }}
-        >
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-mono text-sm font-medium" style={{ color: isDark ? '#f5f5f5' : '#1a1a1a' }}>
-              component.card
-            </h3>
-            <div 
-              className="w-2 h-2 rounded-full" 
-              style={{ backgroundColor: accent }}
-            />
-          </div>
-          <p className="text-xs font-mono opacity-60 leading-relaxed" style={{ color: isDark ? '#d1d5db' : '#6a6a6a' }}>
-            your color.palette determines the visual hierarchy and mood of every interface element
-          </p>
-        </div>
-
-        {/* Status Indicators */}
-        <div className="grid grid-cols-3 gap-3">
-          {colors.slice(0, 3).map((color, i) => (
-            <div key={i} className="flex items-center space-x-2">
+        {/* Color Palette Display */}
+        <div className="space-y-3">
+          <h2 className="text-sm font-mono font-medium opacity-60" style={{ color: isDark ? '#e5e5e5' : '#4a4a4a' }}>
+            palette.preview
+          </h2>
+          <div className="grid grid-cols-5 gap-2 h-16">
+            {colors.map((color, i) => (
               <div 
-                className="w-3 h-3 rounded-full border"
-                style={{ backgroundColor: color, borderColor: color + '60' }}
-              />
-              <span className="text-xs font-mono opacity-50" style={{ color: isDark ? '#d1d5db' : '#6a6a6a' }}>
-                {['pri', 'sec', 'acc'][i]}
-              </span>
+                key={i}
+                className="rounded-lg border border-white/10 relative overflow-hidden group transition-all duration-300 hover:scale-105"
+                style={{ backgroundColor: color }}
+              >
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <span className="text-xs font-mono text-white/90 font-medium">
+                    {i + 1}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Modern Interface Preview */}
+        <div 
+          className="rounded-lg border p-5 transition-all duration-500 relative overflow-hidden"
+          style={{ 
+            background: `linear-gradient(135deg, ${colors[0]}15 0%, ${colors[4] || colors[0]}10 100%)`,
+            borderColor: colors[1] + '20'
+          }}
+        >
+          <div className="space-y-4">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-mono font-medium" style={{ color: isDark ? '#f5f5f5' : '#1a1a1a' }}>
+                ui.component
+              </h3>
+              <div className="flex items-center gap-1">
+                {colors.slice(0, 3).map((color, i) => (
+                  <div 
+                    key={i}
+                    className="w-2 h-2 rounded-full" 
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
+              </div>
             </div>
-          ))}
+
+            {/* Primary Action */}
+            <button
+              className="w-full h-10 rounded-lg font-mono text-xs font-medium transition-all duration-300 hover:scale-[1.02] border"
+              style={{ 
+                backgroundColor: colors[1],
+                color: '#ffffff',
+                borderColor: colors[1]
+              }}
+            >
+              execute({colors[1]?.slice(1, 4)})
+            </button>
+
+            {/* Secondary Elements */}
+            <div className="grid grid-cols-2 gap-3">
+              <div 
+                className="h-8 rounded-lg border flex items-center justify-center transition-all duration-300 hover:scale-[1.01]"
+                style={{ 
+                  backgroundColor: colors[2] + '20',
+                  borderColor: colors[2] + '40'
+                }}
+              >
+                <span className="text-xs font-mono" style={{ color: colors[2] }}>
+                  {colors[2]?.slice(1, 4)}
+                </span>
+              </div>
+              <div 
+                className="h-8 rounded-lg border flex items-center justify-center transition-all duration-300 hover:scale-[1.01]"
+                style={{ 
+                  backgroundColor: colors[3] + '20',
+                  borderColor: colors[3] + '40'
+                }}
+              >
+                <span className="text-xs font-mono" style={{ color: colors[3] }}>
+                  {colors[3]?.slice(1, 4)}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Color Code Display */}
+        <div className="space-y-2">
+          <h4 className="text-xs font-mono opacity-50" style={{ color: isDark ? '#d1d5db' : '#6a6a6a' }}>
+            hex.values
+          </h4>
+          <div className="grid grid-cols-1 gap-1">
+            {colors.slice(0, 3).map((color, i) => (
+              <div key={i} className="flex items-center gap-3 p-2 rounded border border-white/5">
+                <div 
+                  className="w-4 h-4 rounded border border-white/20"
+                  style={{ backgroundColor: color }}
+                />
+                <span className="text-xs font-mono opacity-70" style={{ color: isDark ? '#d1d5db' : '#6a6a6a' }}>
+                  {color.toUpperCase()}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Usage Indicator */}
+        <div 
+          className="rounded-lg p-4 border"
+          style={{ 
+            backgroundColor: colors[4] + '10',
+            borderColor: colors[4] + '30'
+          }}
+        >
+          <p className="text-xs font-mono opacity-60 leading-relaxed" style={{ color: isDark ? '#d1d5db' : '#6a6a6a' }}>
+            live.rendering your palette across interface elements with real-time color.mapping
+          </p>
         </div>
       </div>
     </aside>
