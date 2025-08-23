@@ -183,6 +183,26 @@ All colors MUST be HSL.
     @apply transition-all duration-200 ease-in;
     animation: paletteSlideOut 0.2s ease-in forwards;
   }
+
+  /* Floating tooltip animations */
+  .floating-tooltip {
+    @apply absolute pointer-events-none z-50 px-2 py-1 text-xs font-mono rounded-md 
+           bg-popover/95 backdrop-blur text-popover-foreground border border-border/50 
+           shadow-md opacity-0 translate-y-2 transition-all duration-200 ease-out;
+  }
+  
+  .floating-tooltip.show {
+    @apply opacity-100 translate-y-0;
+  }
+
+  /* Hover effects for action buttons */
+  .action-button {
+    @apply relative transition-all duration-200 hover:-translate-y-0.5;
+  }
+
+  .action-button:hover .floating-tooltip {
+    @apply opacity-100 translate-y-0;
+  }
 }
 
 /* Micro-interactions */
