@@ -12,10 +12,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center">
-      <header className="w-full pt-16 pb-10">
+      <header className="w-full pt-8 pb-6">
         <div className="container mx-auto relative">
-          <h1 className="text-2xl md:text-3xl text-center font-mono font-medium text-[hsl(var(--text-primary))] animate-fade-in">
-            palette.generator
+          <h1 className="text-xl md:text-2xl text-center font-mono font-medium text-[hsl(var(--text-primary))] animate-fade-in">
+            Iris
           </h1>
           <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
             <ThemeToggle />
@@ -36,7 +36,7 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="w-full px-4 md:px-8 pb-28 md:pb-16">
+      <main className="w-full px-4 md:px-6 pb-16 md:pb-12">
         <PaletteGenerator appliedPalette={appliedPalette} />
       </main>
     </div>

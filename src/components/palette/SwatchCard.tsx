@@ -82,7 +82,7 @@ const SwatchCard: React.FC<SwatchCardProps> = ({
 
   return (
     <div
-      className={`swatch-card flex flex-col items-center p-4 select-none ${dragging ? 'scale-[1.02] shadow-card-hover' : ''} ${animClass}`}
+      className={`swatch-card flex flex-col items-center p-3 select-none ${dragging ? 'scale-[1.02] shadow-card-hover' : ''} ${animClass}`}
       style={animState === 'in' && animationDelay ? { animationDelay: `${animationDelay}ms` } : undefined}
       draggable
       onDragStart={() => { setDragging(true); onDragStart(index); }}

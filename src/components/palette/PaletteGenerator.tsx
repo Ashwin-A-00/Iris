@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import PreviewPane from "./PreviewPane";
 import { toPng } from "html-to-image";
 import { toast } from "@/hooks/use-toast";
-import { Sun, Moon } from "lucide-react";
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const hslToHex = (h: number, s: number, l: number) => {
@@ -50,8 +50,8 @@ const randomPastelPalette = (): string[] => {
   const offsets = [0, 25, 50, 200, 310];
   return offsets.map((off, i) => {
     const h = (base + off) % 360;
-    const s = 65 + (i % 2) * 5;  // 65–70
-    const l = 85 - (i % 3) * 3;  // 85, 82, 79
+    const s = 65 + Math.floor(Math.random() * 10);  // 65–75 for more variety
+    const l = 80 + Math.floor(Math.random() * 15);  // 80–95 for more variety
     return hslToHex(h, s, l);
   });
 };
@@ -65,7 +65,7 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
   const [animState, setAnimState] = useState<'idle' | 'out' | 'in'>('in');
   const [dragFrom, setDragFrom] = useState<number | null>(null);
   const [preview, setPreview] = useState(false);
-  const [previewDark, setPreviewDark] = useState(false);
+
   const [locked, setLocked] = useState<boolean[]>([false, false, false, false, false]);
   const [harmony, setHarmony] = useState<Harmony>('random');
   const paletteRef = useRef<HTMLDivElement>(null);
@@ -76,7 +76,7 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [harmony, locked, colors]);
+  }, [harmony, locked]);
 
   useEffect(() => {
     if (appliedPalette && appliedPalette.length === 5) {
@@ -90,10 +90,10 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
     }
   }, [appliedPalette]);
 
-  const generateByHarmony = useCallback((rule: Harmony, baseHue?: number): string[] => {
-    const base = baseHue ?? hexToHsl(colors.find((_, i) => !locked[i]) ?? colors[0]).h;
-    const sat = 68; // pastel
-    const light = 82;
+  const generateByHarmony = (rule: Harmony, baseHue?: number): string[] => {
+    const base = baseHue ?? Math.floor(Math.random() * 360);
+    const sat = 65 + Math.floor(Math.random() * 15); // 65–80 for more variety
+    const light = 80 + Math.floor(Math.random() * 15); // 80–95 for more variety
     const offsets: number[] = (() => {
       switch (rule) {
         case 'analogous': return [-30, -15, 0, 15, 30];
@@ -106,14 +106,14 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
 
     return offsets.map((off, i) => {
       if (rule === 'monochromatic') {
-        const l = [86, 82, 78, 84, 80][i] ?? light;
-        return hslToHex(base, sat, l);
+        const l = light + (i * 2 - 4); // Vary lightness around the base
+        return hslToHex(base, sat, Math.max(75, Math.min(95, l)));
       }
       const h = (base + off + 360) % 360;
-      const l = [86, 82, 78, 84, 80][i] ?? light;
-      return hslToHex(h, sat, l);
+      const l = light + (i * 2 - 4); // Vary lightness around the base
+      return hslToHex(h, sat, Math.max(75, Math.min(95, l)));
     });
-  }, [colors, locked]);
+  };
 
   const generate = useCallback((overrideRule?: Harmony) => {
     const rule = overrideRule ?? harmony;
@@ -124,7 +124,7 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
       setAnimState('in');
       window.setTimeout(() => setAnimState('idle'), 300);
     }, 150);
-  }, [harmony, locked, generateByHarmony]);
+  }, [harmony, locked]);
 
   const onDragStart = (index: number) => setDragFrom(index);
   const onDragEnter = (index: number) => {
@@ -169,7 +169,7 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
     window.setTimeout(() => t.dismiss(), 2000);
   };
 
-  const gridClass = preview ? 'grid-cols-1 lg:grid-cols-2 gap-8' : 'grid-cols-1';
+  const gridClass = preview ? 'grid-cols-1 lg:grid-cols-2 gap-6' : 'grid-cols-1';
 
   const harmonyOptions: { key: Harmony, label: string }[] = [
     { key: 'analogous', label: 'Analogous' },
@@ -184,7 +184,7 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
         <div>
           <div className="mx-auto max-w-6xl">
             {/* Harmony selector */}
-            <div className="mb-4">
+            <div className="mb-3">
               {/* Mobile dropdown */}
               <div className="md:hidden mb-2">
                 <Select value={harmony} onValueChange={(v: any) => { setHarmony(v); generate(v); }}>
@@ -205,7 +205,7 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
                     key={opt.key}
                     variant={harmony === opt.key ? 'secondary' : 'outline'}
                     size="sm"
-                    className={`rounded transition-all duration-200 hover:-translate-y-0.5 font-mono text-xs ${harmony === opt.key ? 'bg-secondary/70' : ''}`}
+                    className={`rounded transition-all duration-200 hover:-translate-y-0.5 font-mono ${harmony === opt.key ? 'bg-secondary/70' : ''}`}
                     onClick={() => { setHarmony(opt.key); generate(opt.key); }}
                     aria-label={`${opt.label} harmony`}
                   >
@@ -215,7 +215,7 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
               </div>
             </div>
 
-            <div ref={paletteRef} className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6" role="list" aria-label="Color palette">
+            <div ref={paletteRef} className="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-4" role="list" aria-label="Color palette">
               {colors.map((c, i) => (
                 <SwatchCard
                   key={`${c}-${i}`}
@@ -233,50 +233,25 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
             </div>
           </div>
 
-          <div className="mt-8 hidden md:flex items-center justify-center gap-2">
-            <div className="relative group">
-              <Button variant="outline" size="sm" onClick={() => generate()} aria-label="Generate Palette" className="action-button rounded font-mono text-xs">
-                generate
-              </Button>
-              <div className="floating-tooltip -bottom-8 left-1/2 -translate-x-1/2 group-hover:opacity-100 group-hover:translate-y-0">
-                new colors
-              </div>
-            </div>
-            <div className="relative group">
-              <Button variant="outline" size="sm" className="action-button rounded font-mono text-xs" onClick={() => setPreview(p => !p)} aria-label="Toggle Preview">
-                {preview ? 'hide' : 'preview'}
-              </Button>
-              <div className="floating-tooltip -bottom-8 left-1/2 -translate-x-1/2 group-hover:opacity-100 group-hover:translate-y-0">
-                {preview ? 'hide preview' : 'show preview'}
-              </div>
-            </div>
-            <div className="relative group">
-              <Button variant="outline" size="sm" className="action-button rounded font-mono text-xs" onClick={exportPng} aria-label="Export as PNG">
-                export
-              </Button>
-              <div className="floating-tooltip -bottom-8 left-1/2 -translate-x-1/2 group-hover:opacity-100 group-hover:translate-y-0">
-                download png
-              </div>
-            </div>
-            <div className="relative group">
-              <Button variant="secondary" size="sm" className="action-button rounded font-mono text-xs" onClick={savePalette} aria-label="Save palette">
-                save
-              </Button>
-              <div className="floating-tooltip -bottom-8 left-1/2 -translate-x-1/2 group-hover:opacity-100 group-hover:translate-y-0">
-                save palette
-              </div>
-            </div>
+          <div className="mt-6 hidden md:flex items-center justify-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => generate()} aria-label="Generate Palette" className="action-button rounded font-mono">
+              generate
+            </Button>
+            <Button variant="outline" size="sm" className="action-button rounded font-mono" onClick={() => setPreview(p => !p)} aria-label="Toggle Preview">
+              {preview ? 'hide' : 'preview'}
+            </Button>
+            <Button variant="outline" size="sm" className="action-button rounded font-mono" onClick={exportPng} aria-label="Export as PNG">
+              export
+            </Button>
+            <Button variant="secondary" size="sm" className="action-button rounded font-mono" onClick={savePalette} aria-label="Save palette">
+              save
+            </Button>
           </div>
         </div>
 
         {preview && (
           <div className="hidden lg:block h-full relative">
-            <PreviewPane colors={colors} mode={previewDark ? 'dark' : 'light'} />
-            <div className="absolute top-3 right-3">
-              <Button variant="ghost" size="icon" aria-label="Toggle preview mode" onClick={() => setPreviewDark(d => !d)} className="rounded-md">
-                {previewDark ? <Sun size={16} /> : <Moon size={16} />}
-              </Button>
-            </div>
+            <PreviewPane colors={colors} />
           </div>
         )}
       </div>
@@ -284,38 +259,18 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
       {/* Mobile sticky bar */}
       <div className="md:hidden fixed inset-x-0 bottom-0 p-3">
         <div className="mx-auto max-w-3xl rounded backdrop-blur supports-[backdrop-filter]:bg-background/70 bg-background/80 border shadow-card flex items-center gap-1 p-2">
-          <div className="relative group flex-1">
-            <Button variant="outline" size="sm" onClick={() => generate()} className="action-button w-full rounded font-mono text-xs" aria-label="Generate Palette">
-              gen
-            </Button>
-            <div className="floating-tooltip -top-8 left-1/2 -translate-x-1/2 group-hover:opacity-100 group-hover:translate-y-0">
-              generate
-            </div>
-          </div>
-          <div className="relative group flex-1">
-            <Button variant="outline" size="sm" className="action-button w-full rounded font-mono text-xs" onClick={() => setPreview(p => !p)} aria-label="Toggle Preview">
-              {preview ? 'hide' : 'view'}
-            </Button>
-            <div className="floating-tooltip -top-8 left-1/2 -translate-x-1/2 group-hover:opacity-100 group-hover:translate-y-0">
-              preview
-            </div>
-          </div>
-          <div className="relative group">
-            <Button variant="outline" size="sm" className="action-button rounded font-mono text-xs" onClick={exportPng} aria-label="Export as PNG">
-              png
-            </Button>
-            <div className="floating-tooltip -top-8 left-1/2 -translate-x-1/2 group-hover:opacity-100 group-hover:translate-y-0">
-              export
-            </div>
-          </div>
-          <div className="relative group">
-            <Button variant="secondary" size="sm" className="action-button rounded font-mono text-xs" onClick={savePalette} aria-label="Save palette">
-              save
-            </Button>
-            <div className="floating-tooltip -top-8 left-1/2 -translate-x-1/2 group-hover:opacity-100 group-hover:translate-y-0">
-              save
-            </div>
-          </div>
+          <Button variant="outline" size="sm" onClick={() => generate()} className="action-button flex-1 rounded font-mono" aria-label="Generate Palette">
+            gen
+          </Button>
+          <Button variant="outline" size="sm" className="action-button flex-1 rounded font-mono" onClick={() => setPreview(p => !p)} aria-label="Toggle Preview">
+            {preview ? 'hide' : 'view'}
+          </Button>
+          <Button variant="outline" size="sm" className="action-button rounded font-mono" onClick={exportPng} aria-label="Export as PNG">
+            png
+          </Button>
+          <Button variant="secondary" size="sm" className="action-button rounded font-mono" onClick={savePalette} aria-label="Save palette">
+            save
+          </Button>
         </div>
       </div>
     </section>
