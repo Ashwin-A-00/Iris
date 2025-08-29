@@ -85,7 +85,7 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
         setColors(appliedPalette);
         setLocked([false, false, false, false, false]);
         setAnimState('in');
-        window.setTimeout(() => setAnimState('idle'), 300);
+        window.setTimeout(() => setAnimState('idle'), 500);
       }, 200);
     }
   }, [appliedPalette]);
@@ -122,8 +122,8 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({ appliedPalette }) =
       const fresh = rule === 'random' ? randomPastelPalette() : generateByHarmony(rule);
       setColors(prev => prev.map((c, i) => (locked[i] ? c : fresh[i])));
       setAnimState('in');
-      window.setTimeout(() => setAnimState('idle'), 300);
-    }, 150);
+      window.setTimeout(() => setAnimState('idle'), 500);
+    }, 200);
   }, [harmony, locked]);
 
   const onDragStart = (index: number) => setDragFrom(index);
