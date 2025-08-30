@@ -5,28 +5,6 @@ interface PreviewPaneProps {
 }
 
 const PreviewPane: React.FC<PreviewPaneProps> = ({ colors }) => {
-  const hexToRgb = (hex: string) => {
-    const clean = hex.replace('#', '');
-    const bigint = parseInt(clean, 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    return { r, g, b };
-  };
-
-  // Calculate the average lightness of the palette to determine text color
-  const getAverageLightness = (hexColors: string[]) => {
-    let totalLightness = 0;
-    hexColors.forEach(color => {
-      const { r, g, b } = hexToRgb(color);
-      const lightness = (r * 0.299 + g * 0.587 + b * 0.114) / 255;
-      totalLightness += lightness;
-    });
-    return totalLightness / hexColors.length;
-  };
-
-  const averageLightness = getAverageLightness(colors);
-  const isDark = averageLightness < 0.6; // Use dark text if background is light, light text if background is dark
 
   return (
     <aside className="w-full h-full animate-fade-in">
@@ -34,8 +12,8 @@ const PreviewPane: React.FC<PreviewPaneProps> = ({ colors }) => {
         
         {/* Color Palette Display */}
         <div className="space-y-2">
-          <h2 className="text-sm font-mono font-medium" style={{ color: isDark ? '#ffffff' : '#4a4a4a', opacity: isDark ? 0.9 : 0.6 }}>
-            palette.preview
+          <h2 className="text-sm font-mono font-medium text-[hsl(var(--text-primary))]" style={{ opacity: 1, fontWeight: '600' }}>
+            Palette.preview
           </h2>
           <div className="grid grid-cols-5 gap-2 h-12">
             {colors.map((color, i) => (
@@ -65,7 +43,7 @@ const PreviewPane: React.FC<PreviewPaneProps> = ({ colors }) => {
           <div className="space-y-3">
             {/* Header */}
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-mono font-medium" style={{ color: isDark ? '#ffffff' : '#1a1a1a' }}>
+              <h3 className="text-sm font-mono font-medium text-[hsl(var(--text-primary))]" style={{ fontWeight: '600' }}>
                 ui.component
               </h3>
               <div className="flex items-center gap-1">
@@ -100,7 +78,7 @@ const PreviewPane: React.FC<PreviewPaneProps> = ({ colors }) => {
                   borderColor: colors[2] + '40'
                 }}
               >
-                <span className="text-xs font-mono" style={{ color: colors[2] }}>
+                <span className="text-xs font-mono font-semibold text-[hsl(var(--text-primary))]" style={{ fontWeight: '600' }}>
                   {colors[2]?.slice(1, 4)}
                 </span>
               </div>
@@ -111,7 +89,7 @@ const PreviewPane: React.FC<PreviewPaneProps> = ({ colors }) => {
                   borderColor: colors[3] + '40'
                 }}
               >
-                <span className="text-xs font-mono" style={{ color: colors[3] }}>
+                <span className="text-xs font-mono font-semibold text-[hsl(var(--text-primary))]" style={{ fontWeight: '600' }}>
                   {colors[3]?.slice(1, 4)}
                 </span>
               </div>
@@ -121,7 +99,7 @@ const PreviewPane: React.FC<PreviewPaneProps> = ({ colors }) => {
 
         {/* Color Code Display */}
         <div className="space-y-2">
-          <h4 className="text-xs font-mono" style={{ color: isDark ? '#ffffff' : '#6a6a6a', opacity: isDark ? 0.8 : 0.5 }}>
+          <h4 className="text-xs font-mono text-[hsl(var(--text-primary))]" style={{ opacity: 1, fontWeight: '600' }}>
             hex.values
           </h4>
           <div className="grid grid-cols-1 gap-1">
@@ -131,7 +109,7 @@ const PreviewPane: React.FC<PreviewPaneProps> = ({ colors }) => {
                   className="w-4 h-4 rounded border border-white/20"
                   style={{ backgroundColor: color }}
                 />
-                <span className="text-xs font-mono" style={{ color: isDark ? '#ffffff' : '#6a6a6a', opacity: isDark ? 0.9 : 0.7 }}>
+                <span className="text-xs font-mono text-[hsl(var(--text-primary))]" style={{ opacity: 1, fontWeight: '600' }}>
                   {color.toUpperCase()}
                 </span>
               </div>
@@ -147,7 +125,7 @@ const PreviewPane: React.FC<PreviewPaneProps> = ({ colors }) => {
             borderColor: colors[4] + '30'
           }}
         >
-          <p className="text-xs font-mono leading-relaxed" style={{ color: isDark ? '#ffffff' : '#6a6a6a', opacity: isDark ? 0.8 : 0.6 }}>
+          <p className="text-xs font-mono leading-relaxed text-[hsl(var(--text-primary))]" style={{ opacity: 1, fontWeight: '600' }}>
             live.rendering your palette across interface elements with real-time color.mapping
           </p>
         </div>

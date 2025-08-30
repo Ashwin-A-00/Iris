@@ -14,9 +14,19 @@ const Index = () => {
     <div className="min-h-screen flex flex-col items-center">
       <header className="w-full pt-8 pb-6">
         <div className="container mx-auto relative">
-          <h1 className="text-xl md:text-2xl text-center font-mono font-medium text-[hsl(var(--text-primary))] animate-fade-in">
-            Iris
-          </h1>
+          {/* Logo */}
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-3">
+            <img 
+              src="/logo.png" 
+              alt="Logo" 
+              className="h-16 w-auto"
+            />
+            <span className="text-lg font-mono font-semibold text-[hsl(var(--text-primary))]">
+              Iris
+            </span>
+          </div>
+          
+
           <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
             <ThemeToggle />
             <Dialog open={savedOpen} onOpenChange={setSavedOpen}>
